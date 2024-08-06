@@ -1,21 +1,13 @@
-import React, { ReactNode, useState } from 'react';
-import { Layout } from './components/Layout';
-import { convertToPdf } from './api';
-import { Button, Textarea } from './components';
-import PdfView from './components/PDFViewer';
+import React, { useState } from 'react';
+import { Layout } from '@/components/Layout';
+import { convertToPdf } from '@/api';
+import { Button, Textarea } from '@/components';
+import PdfView from '@/components/PDFViewer';
 
-import './App.css';
+import '@/App.css';
 import 'react-pdf/dist/Page/TextLayer.css';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
-
-interface OnlyProps {
-  when: unknown;
-  children: ReactNode;
-}
-
-const Only: React.FC<OnlyProps> = ({ when, children }) => {
-  return when ? <>{children}</> : null;
-};
+import { Only } from '@/components/Only';
 
 const App: React.FC = () => {
   const [text, setText] = useState<string>('');
