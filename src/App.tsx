@@ -1,14 +1,14 @@
-import './App.css';
+import { ConversionForm } from './components/ConversionForm';
 import { Layout } from './components/Layout';
+import './App.css';
 
 function App() {
   return (
     <Layout>
-      <div className="flex flex-col md:flex-row gap-4">
-        <main className="w-full">
-          <h1 className="text-4xl font-bold">Welcome to Vite!</h1>
-        </main>
-      </div>
+      <ConversionForm.Root>
+        <ConversionForm.TextArea />
+        <ConversionForm.SubmitButton>Convert to PDF</ConversionForm.SubmitButton>
+      </ConversionForm.Root>
     </Layout>
   );
 }
