@@ -15,7 +15,7 @@ type Props = {
   file: string | ArrayBuffer | { data: ArrayBuffer };
 };
 
-const PdfView: React.FC<Props> = ({ file }) => {
+export const PDFViewer: React.FC<Props> = ({ file }) => {
   const [, setNumPages] = useState<number>(0);
   const [pageNumber] = useState<number>(1);
   const onDocumentLoadSuccess = ({ numPages }: { numPages: number }): void => {
@@ -24,18 +24,18 @@ const PdfView: React.FC<Props> = ({ file }) => {
 
   return (
     <div className="flex flex-col items-center">
-      <div className="border border-gray-500 max-w-[650px]">
+      <div className="border border-gray-500">
         <Document
-          loading={<div className="text-pink font-medium text-xl flex  justify-center items-center ">Loading...</div>}
+          loading={
+            <div className="text-pink font-medium text-xl flex justify-center items-center h-full">Loading...</div>
+          }
           file={file}
           onLoadSuccess={onDocumentLoadSuccess}
           options={options}
         >
-          <Page pageNumber={pageNumber} />
+          <Page pageNumber={pageNumber} width={400} />
         </Document>
       </div>
     </div>
   );
 };
-
-export default PdfView;
