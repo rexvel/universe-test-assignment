@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Layout, Button, Textarea, Only, PDFViewer, SavedPDF } from '@/components';
+import { Layout, Button, Textarea, Only, PDFViewer, SavedPDF, ErrorBoundary } from '@/components';
 import { convertToPdf } from '@/api';
 import { useSavedPDFs } from '@/hooks';
 
@@ -39,24 +39,33 @@ const App: React.FC = () => {
   };
 
   return (
-    <Layout>
-      <main className="flex h-screen">
-        <div className="w-1/2 p-4 flex flex-col">
-          <Textarea value={text} onChange={handleTextChange} className="flex-grow mb-4" />
-          <Button onClick={handleConvert} className="w-full">
-            Convert file
-          </Button>
-          <SavedPDF savedPdfData={savedEntries} className="mt-4">
-            <SavedPDF.List savedPdfData={savedEntries} onEntryClick={handleSavedEntryClick} />
-          </SavedPDF>
+    <ErrorBoundary
+      fallback={({ error }) => (
+        <div>
+          <h2>Oops! Something went wrong.</h2>
+          <pre>{error?.message}</pre>
         </div>
-        <div className="w-1/2 p-4 flex justify-center">
-          <Only when={pdfUrl}>
-            <PDFViewer file={`data:application/pdf;base64,${pdfUrl}`} />
-          </Only>
-        </div>
-      </main>
-    </Layout>
+      )}
+    >
+      <Layout>
+        <main className="flex h-screen">
+          <div className="w-1/2 p-4 flex flex-col">
+            <Textarea value={text} onChange={handleTextChange} className="flex-grow mb-4" />
+            <Button onClick={handleConvert} className="w-full">
+              Convert file
+            </Button>
+            <SavedPDF savedPdfData={savedEntries} className="mt-4">
+              <SavedPDF.List savedPdfData={savedEntries} onEntryClick={handleSavedEntryClick} />
+            </SavedPDF>
+          </div>
+          <div className="w-1/2 p-4 flex justify-center">
+            <Only when={pdfUrl}>
+              <PDFViewer file={`data:application/pdf;base64,${pdfUrl}`} />
+            </Only>
+          </div>
+        </main>
+      </Layout>
+    </ErrorBoundary>
   );
 };
 
