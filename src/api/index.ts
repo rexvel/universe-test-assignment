@@ -1,4 +1,4 @@
-import { apiKey, apiURl } from '../constants';
+import { apiKey, apiURl } from '@/constants';
 
 const handleErrorMessage = (error: unknown) => (error instanceof Error ? error.message : 'Unknown error');
 
