@@ -1,7 +1,7 @@
-import React, { useEffect, useState, useCallback } from 'react';
-import useIndexedDB from '@/hooks/useIndexedDB';
+import React, { useState } from 'react';
 import { Layout, Button, Textarea, Only, PDFViewer, SavedPDF } from '@/components';
 import { convertToPdf } from '@/api';
+import { useSavedPDFs } from '@/hooks';
 
 import '@/App.css';
 import 'react-pdf/dist/Page/TextLayer.css';
@@ -15,28 +15,8 @@ export interface PdfFileData {
 const App: React.FC = () => {
   const [text, setText] = useState<string>('');
   const [pdfUrl, setPdfUrl] = useState<string | null>(null);
-  const [savedEntries, setSavedEntries] = useState<PdfFileData[]>([]);
 
-  const { add, getAll, isReady } = useIndexedDB<PdfFileData>({
-    dbName: 'PdfDatabase',
-    storeName: 'pdfs',
-    version: 1,
-  });
-
-  const loadSavedDocs = useCallback(async () => {
-    if (isReady) {
-      try {
-        const entries = await getAll();
-        setSavedEntries(entries);
-      } catch (error) {
-        console.error('Error loading saved entries:', error);
-      }
-    }
-  }, [isReady, getAll]);
-
-  useEffect(() => {
-    loadSavedDocs();
-  }, [loadSavedDocs]);
+  const { savedEntries, addPdf } = useSavedPDFs();
 
   const handleTextChange = (event: React.ChangeEvent<HTMLTextAreaElement>): void => {
     setText(event.target.value);
@@ -50,9 +30,8 @@ const App: React.FC = () => {
   const handleConvert = async (): Promise<void> => {
     try {
       const url = await convertToPdf(text);
+      await addPdf({ text, pdfUrl: url });
       setPdfUrl(url);
-      await add({ text, pdfUrl: url });
-      await loadSavedDocs();
     } catch (error) {
       console.error('Error converting to PDF:', error);
     }
@@ -70,7 +49,6 @@ const App: React.FC = () => {
             <SavedPDF.List savedPdfData={savedEntries} onEntryClick={handleSavedEntryClick} />
           </SavedPDF>
         </div>
-
         <div className="w-1/2 p-4 flex justify-center">
           <Only when={pdfUrl}>
             <PDFViewer file={`data:application/pdf;base64,${pdfUrl}`} />
