@@ -3,12 +3,14 @@ import { Layout } from './components/Layout';
 import './App.css';
 
 function App() {
+  const { Container, TextArea, SubmitButton } = ConversionForm;
+
   return (
     <Layout>
-      <ConversionForm.Root>
-        <ConversionForm.TextArea />
-        <ConversionForm.SubmitButton>Convert to PDF</ConversionForm.SubmitButton>
-      </ConversionForm.Root>
+      <Container>
+        <TextArea />
+        <SubmitButton>Convert to PDF</SubmitButton>
+      </Container>
     </Layout>
   );
 }
