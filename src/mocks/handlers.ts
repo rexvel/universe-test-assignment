@@ -6,6 +6,7 @@ interface CreatePdfRequestBody {
 
 const API_KEY = '';
 
+// TODO move url to constants
 export const handlers = [
   http.post<CreatePdfRequestBody>(`http://95.217.134.12:4010/create-pdf`, async ({ request }) => {
     const url = new URL(request.url);
