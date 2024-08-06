@@ -4,3 +4,4 @@ export * from './Textarea';
 export * from './PDFViewer';
 export * from './Only';
 export * from './SavedPDF';
+export * from './ErrorBoundary';
