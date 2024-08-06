@@ -8,6 +8,7 @@ import 'react-pdf/dist/Page/TextLayer.css';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 
 export interface PdfFileData {
+  id?: string;
   text: string;
   pdfUrl: string | null;
 }
