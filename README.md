@@ -24,7 +24,7 @@
 - [Commitlint](https://github.com/conventional-changelog/commitlint)
 - [Lint-staged](https://github.com/okonet/lint-staged)
 
-### Структура Папок в src
+### Основна структура проєкту
 
 - **src**
   - **api**: Модуль для виконання API-запитів
