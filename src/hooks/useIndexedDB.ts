@@ -22,14 +22,13 @@ export const useIndexedDB = <T>({ dbName, storeName, version = 1 }: UseIndexedDB
       const database = (event.target as IDBOpenDBRequest).result;
       setDb(database);
       setIsReady(true);
+      updateCount(database);
 
       database.addEventListener('versionchange', () => {
         database.close();
         setDb(null);
         setIsReady(false);
       });
-
-      updateCount(database);
     };
 
     request.onupgradeneeded = (event) => {
@@ -56,17 +55,17 @@ export const useIndexedDB = <T>({ dbName, storeName, version = 1 }: UseIndexedDB
     [storeName],
   );
 
-  const add = useCallback(
-    async (item: T): Promise<IDBValidKey> => {
+  const performTransaction = useCallback(
+    <R>(mode: IDBTransactionMode, callback: (store: IDBObjectStore) => IDBRequest<R>): Promise<R> => {
       return new Promise((resolve, reject) => {
         if (!db) {
           reject(new Error('Database not initialized'));
           return;
         }
 
-        const transaction = db.transaction(storeName, 'readwrite');
+        const transaction = db.transaction(storeName, mode);
         const store = transaction.objectStore(storeName);
-        const request = store.add(item);
+        const request = callback(store);
 
         request.onerror = () => reject(request.error);
         request.onsuccess = () => resolve(request.result);
@@ -75,82 +74,30 @@ export const useIndexedDB = <T>({ dbName, storeName, version = 1 }: UseIndexedDB
     [db, storeName],
   );
 
-  const getAll = useCallback(async (): Promise<T[]> => {
-    return new Promise((resolve, reject) => {
-      if (!db) {
-        reject(new Error('Database not initialized'));
-        return;
-      }
+  const add = useCallback(
+    (item: T) => performTransaction('readwrite', (store) => store.add(item)),
+    [performTransaction],
+  );
 
-      const transaction = db.transaction(storeName, 'readonly');
-      const store = transaction.objectStore(storeName);
-      const request = store.getAll();
-
-      request.onerror = () => reject(request.error);
-      request.onsuccess = () => resolve(request.result);
-    });
-  }, [db, storeName]);
+  const getAll = useCallback(() => performTransaction('readonly', (store) => store.getAll()), [performTransaction]);
 
   const get = useCallback(
-    async (id: IDBValidKey): Promise<T | undefined> => {
-      return new Promise((resolve, reject) => {
-        if (!db) {
-          reject(new Error('Database not initialized'));
-          return;
-        }
-
-        const transaction = db.transaction(storeName, 'readonly');
-        const store = transaction.objectStore(storeName);
-        const request = store.get(id);
-
-        request.onerror = () => reject(request.error);
-        request.onsuccess = () => resolve(request.result);
-      });
-    },
-    [db, storeName],
+    (id: IDBValidKey) => performTransaction('readonly', (store) => store.get(id)),
+    [performTransaction],
   );
 
   const update = useCallback(
     async (id: IDBValidKey, changes: Partial<T>): Promise<IDBValidKey> => {
-      return new Promise((resolve, reject) => {
-        if (!db) {
-          reject(new Error('Database not initialized'));
-          return;
-        }
-
-        const transaction = db.transaction(storeName, 'readwrite');
-        const store = transaction.objectStore(storeName);
-        const request = store.get(id);
-
-        request.onerror = () => reject(request.error);
-        request.onsuccess = () => {
-          const item = { ...request.result, ...changes };
-          const updateRequest = store.put(item);
-          updateRequest.onerror = () => reject(updateRequest.error);
-          updateRequest.onsuccess = () => resolve(updateRequest.result);
-        };
-      });
+      const item = (await get(id)) as T;
+      if (!item) throw new Error('Item not found');
+      return performTransaction('readwrite', (store) => store.put({ ...item, ...changes }));
     },
-    [db, storeName],
+    [get, performTransaction],
   );
 
   const remove = useCallback(
-    async (id: IDBValidKey): Promise<void> => {
-      return new Promise((resolve, reject) => {
-        if (!db) {
-          reject(new Error('Database not initialized'));
-          return;
-        }
-
-        const transaction = db.transaction(storeName, 'readwrite');
-        const store = transaction.objectStore(storeName);
-        const request = store.delete(id);
-
-        request.onerror = () => reject(request.error);
-        request.onsuccess = () => resolve();
-      });
-    },
-    [db, storeName],
+    (id: IDBValidKey) => performTransaction('readwrite', (store) => store.delete(id)),
+    [performTransaction],
   );
 
   return { add, getAll, get, update, remove, isReady, count };
