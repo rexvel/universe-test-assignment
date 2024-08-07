@@ -7,6 +7,7 @@ import '@/App.css';
 import 'react-pdf/dist/Page/TextLayer.css';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 import { encodePdfDataUrl } from './lib/utils';
+import { ErrorFallback } from './components/Fallback';
 
 export interface PdfFileData {
   id?: string;
@@ -42,14 +43,7 @@ const App: React.FC = () => {
   };
 
   return (
-    <ErrorBoundary
-      fallback={({ error }) => (
-        <div>
-          <h2>Oops! Something went wrong.</h2>
-          <pre>{error?.message}</pre>
-        </div>
-      )}
-    >
+    <ErrorBoundary fallback={ErrorFallback}>
       <Layout>
         <main className="flex h-screen">
           <div className="w-1/2 p-4 flex flex-col">
