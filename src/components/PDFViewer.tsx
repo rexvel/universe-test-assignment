@@ -5,7 +5,7 @@ import 'react-pdf/dist/esm/Page/TextLayer.css';
 import { DEFAULT_PAGE_NUMBER } from '@/constants';
 import { encodePdfDataUrl } from '@/lib/utils';
 import { Nullish } from '@/types';
-import { Card, CardContent } from './Card';
+import { Card, CardContent } from '@/components';
 
 const options = {
   cMapUrl: '/cmaps/',
