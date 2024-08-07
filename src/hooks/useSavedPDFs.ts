@@ -1,19 +1,19 @@
 import { useState, useEffect, useCallback } from 'react';
-import { PdfFileData } from '@/App';
+import { PdfFileData } from '@/types';
 import { useIndexedDB } from '@/hooks';
 import { indexedDbConfig } from '@/constants';
 
 export const useSavedPDFs = () => {
   const { add, getAll, isReady } = useIndexedDB<PdfFileData>(indexedDbConfig);
-  const [savedEntries, setSavedEntries] = useState<PdfFileData[]>([]);
+  const [savedPDFs, setSavedPDFs] = useState<PdfFileData[]>([]);
 
   const loadSavedPDF = useCallback(async () => {
     if (isReady) {
       try {
-        const entries = await getAll();
-        setSavedEntries(entries);
+        const pdfList = await getAll();
+        setSavedPDFs(pdfList);
       } catch (error) {
-        console.error('Error loading saved entries:', error);
+        console.error('Error loading saved pdf files:', error);
       }
     }
   }, [isReady, getAll]);
@@ -27,7 +27,7 @@ export const useSavedPDFs = () => {
   };
 
   return {
-    savedEntries,
+    savedPDFs,
     addPdf,
     loadSavedPDF,
     isReady,

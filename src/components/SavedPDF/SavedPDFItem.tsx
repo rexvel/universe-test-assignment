@@ -1,6 +1,6 @@
 import React from 'react';
-import { PdfFileData } from '@/App';
-import { DOCS_NAME_MAX_DISPLAYED_CHARS } from '@/constants';
+import { PdfFileData } from '@/types';
+import { Card, CardContent, CardHeader, CardTitle } from '../Card';
 
 interface SavedPDFItemProps {
   entry: PdfFileData;
@@ -9,9 +9,13 @@ interface SavedPDFItemProps {
 
 export const SavedPDFItem: React.FC<SavedPDFItemProps> = ({ entry, onClick }) => {
   return (
-    <li onClick={() => onClick(entry)}>
-      {entry.text.substring(0, DOCS_NAME_MAX_DISPLAYED_CHARS)}
-      {entry.text.length > DOCS_NAME_MAX_DISPLAYED_CHARS ? '...' : ''}
-    </li>
+    <Card onClick={() => onClick(entry)} className="w-full mb-4 last:mb-0">
+      <CardHeader>
+        <CardTitle className="text-lg">{entry.name}</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <p className="text-sm text-gray-500">Created: {new Date(entry.creationDate).toLocaleString()}</p>
+      </CardContent>
+    </Card>
   );
 };

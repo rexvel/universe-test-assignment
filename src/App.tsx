@@ -1,27 +1,19 @@
 import React, { useState } from 'react';
-import { Layout, Button, Textarea, Only, PDFViewer, SavedPDF, ErrorBoundary, SavedPDFList } from '@/components';
-import { convertToPdf } from '@/api';
+import { Layout, Button, Textarea, PDFViewer, SavedPDF, ErrorBoundary, SavedPDFList } from '@/components';
 import { useSavedPDFs } from '@/hooks';
+import { convertToPdf } from '@/api';
+import { ErrorFallback } from '@/components/Fallback';
+import { Nullish, PdfFileData } from '@/types';
 
-import '@/App.css';
 import 'react-pdf/dist/Page/TextLayer.css';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
-import { encodePdfDataUrl } from './lib/utils';
-import { ErrorFallback } from './components/Fallback';
-
-export interface PdfFileData {
-  id?: string;
-  text: string;
-  pdfUrl: string | null;
-}
-
-export type Nullish = null | undefined;
+import '@/App.css';
 
 const App: React.FC = () => {
   const [text, setText] = useState('');
   const [pdfUrl, setPdfUrl] = useState<string | Nullish>();
 
-  const { savedEntries, addPdf } = useSavedPDFs();
+  const { savedPDFs, addPdf } = useSavedPDFs();
 
   const handleTextChange = (event: React.ChangeEvent<HTMLTextAreaElement>): void => {
     setText(event.target.value);
@@ -35,30 +27,32 @@ const App: React.FC = () => {
   const handleConvert = async (): Promise<void> => {
     try {
       const url = await convertToPdf(text);
-      await addPdf({ text, pdfUrl: url });
+      await addPdf({
+        text,
+        pdfUrl: url,
+        creationDate: new Date().toISOString(),
+        name: 'Saved PDF file',
+      });
       setPdfUrl(url);
     } catch (error) {
       console.error('Error converting to PDF:', error);
     }
   };
-
   return (
     <ErrorBoundary fallback={ErrorFallback}>
       <Layout>
         <main className="flex h-screen">
           <div className="w-1/2 p-4 flex flex-col">
-            <Textarea value={text} onChange={handleTextChange} className="flex-grow mb-4" />
+            <Textarea value={text} onChange={handleTextChange} className="min-h-[100px] mb-4" />
             <Button onClick={handleConvert} className="w-full">
               Convert text to pdf
             </Button>
-            <SavedPDF savedPdfData={savedEntries} className="mt-4">
-              <SavedPDFList savedPdfData={savedEntries} onEntryClick={handleSavedEntryClick} />
+            <SavedPDF savedPdfData={savedPDFs} className="mt-4">
+              <SavedPDFList savedPdfData={savedPDFs} onEntryClick={handleSavedEntryClick} />
             </SavedPDF>
           </div>
           <div className="w-1/2 p-4 flex justify-center">
-            <Only when={pdfUrl}>
-              <PDFViewer file={encodePdfDataUrl(pdfUrl)} />
-            </Only>
+            <PDFViewer pdfUrl={pdfUrl} />
           </div>
         </main>
       </Layout>

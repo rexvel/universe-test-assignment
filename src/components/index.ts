@@ -5,3 +5,5 @@ export * from './PDFViewer';
 export * from './Only';
 export * from './SavedPDF';
 export * from './ErrorBoundary';
+export * from './Card';
+export * from './ScrollArea';

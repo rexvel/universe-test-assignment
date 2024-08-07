@@ -2,8 +2,10 @@ import React from 'react';
 import { Document, Page } from 'react-pdf';
 import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
 import 'react-pdf/dist/esm/Page/TextLayer.css';
-import '@react-pdf-viewer/core/lib/styles/index.css';
 import { DEFAULT_PAGE_NUMBER } from '@/constants';
+import { encodePdfDataUrl } from '@/lib/utils';
+import { Nullish } from '@/types';
+import { Card, CardContent } from './Card';
 
 const options = {
   cMapUrl: '/cmaps/',
@@ -11,23 +13,33 @@ const options = {
 };
 
 type Props = {
-  file: string | ArrayBuffer | { data: ArrayBuffer };
+  pdfUrl: string | Nullish;
 };
 
-export const PDFViewer: React.FC<Props> = ({ file }) => {
+export const PDFViewer: React.FC<Props> = ({ pdfUrl }) => {
+  if (!pdfUrl) {
+    return (
+      <Card className="w-full h-[500px] flex items-center justify-center">
+        <CardContent>
+          <p className="text-gray-500 text-center">Select or create a PDF file to preview its content</p>
+        </CardContent>
+      </Card>
+    );
+  }
+  const file = encodePdfDataUrl(pdfUrl);
   return (
-    <div className="flex flex-col items-center">
-      <div className="border border-gray-500">
-        <Document
-          loading={
-            <div className="text-pink font-medium text-xl flex justify-center items-center h-full">Loading...</div>
-          }
-          file={file}
-          options={options}
-        >
-          <Page pageNumber={DEFAULT_PAGE_NUMBER} width={400} />
-        </Document>
-      </div>
+    <div className="flex flex-col items-center  h-[600px]">
+      <Document loading={<div className="text-center py-4">Loading PDF...</div>} file={file} options={options}>
+        <div className="border border-gray-200 rounded-md overflow-hidden w-[490px]">
+          <Page
+            pageNumber={DEFAULT_PAGE_NUMBER}
+            width={400}
+            className="mx-auto"
+            renderTextLayer={false}
+            renderAnnotationLayer={false}
+          />
+        </div>
+      </Document>
     </div>
   );
 };
