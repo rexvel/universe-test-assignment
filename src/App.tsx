@@ -1,21 +1,14 @@
 import React, { useState } from 'react';
 import { Layout, Button, Textarea, Only, PDFViewer, SavedPDF, ErrorBoundary, SavedPDFList } from '@/components';
-import { convertToPdf } from '@/api';
 import { useSavedPDFs } from '@/hooks';
+import { convertToPdf } from '@/api';
+import { encodePdfDataUrl } from '@/lib/utils';
+import { ErrorFallback } from '@/components/Fallback';
+import { Nullish, PdfFileData } from '@/types';
 
-import '@/App.css';
 import 'react-pdf/dist/Page/TextLayer.css';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
-import { encodePdfDataUrl } from './lib/utils';
-import { ErrorFallback } from './components/Fallback';
-
-export interface PdfFileData {
-  id?: string;
-  text: string;
-  pdfUrl: string | null;
-}
-
-export type Nullish = null | undefined;
+import '@/App.css';
 
 const App: React.FC = () => {
   const [text, setText] = useState('');
