@@ -3,7 +3,7 @@ import { PdfFileData } from '@/App';
 import { useIndexedDB } from '@/hooks';
 import { indexedDbConfig } from '@/constants';
 
-export function useSavedPDFs() {
+export const useSavedPDFs = () => {
   const { add, getAll, isReady } = useIndexedDB<PdfFileData>(indexedDbConfig);
   const [savedEntries, setSavedEntries] = useState<PdfFileData[]>([]);
 
@@ -32,4 +32,4 @@ export function useSavedPDFs() {
     loadSavedPDF,
     isReady,
   };
-}
+};
