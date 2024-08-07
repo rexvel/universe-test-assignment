@@ -1,13 +1,10 @@
 import { useState, useEffect, useCallback } from 'react';
 import { PdfFileData } from '@/App';
 import { useIndexedDB } from '@/hooks';
+import { indexedDbConfig } from '@/constants';
 
 export function useSavedPDFs() {
-  const { add, getAll, isReady } = useIndexedDB<PdfFileData>({
-    dbName: 'PdfDatabase',
-    storeName: 'pdfs',
-    version: 1,
-  });
+  const { add, getAll, isReady } = useIndexedDB<PdfFileData>(indexedDbConfig);
   const [savedEntries, setSavedEntries] = useState<PdfFileData[]>([]);
 
   const loadSavedPDF = useCallback(async () => {
