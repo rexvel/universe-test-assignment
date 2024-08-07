@@ -1,7 +1,6 @@
 import React, { ReactNode } from 'react';
 import { PdfFileData } from '@/App';
 import { SAVED_DOCS_EMPTY_LENGTH } from '@/constants';
-import { SavedPDFList } from '@/components/SavedPDF';
 
 interface SavedPDFProps {
   savedPdfData: PdfFileData[];
@@ -9,9 +8,7 @@ interface SavedPDFProps {
   className?: string;
 }
 
-export const SavedPDF: React.FC<SavedPDFProps> & {
-  List: typeof SavedPDFList;
-} = ({ savedPdfData, children, className }) => {
+export const SavedPDF: React.FC<SavedPDFProps> = ({ savedPdfData, children, className }) => {
   return (
     <div className={className}>
       <h3>Saved Entries</h3>
@@ -19,5 +16,3 @@ export const SavedPDF: React.FC<SavedPDFProps> & {
     </div>
   );
 };
-
-SavedPDF.List = SavedPDFList;

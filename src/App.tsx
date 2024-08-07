@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Layout, Button, Textarea, Only, PDFViewer, SavedPDF, ErrorBoundary } from '@/components';
+import { Layout, Button, Textarea, Only, PDFViewer, SavedPDF, ErrorBoundary, SavedPDFList } from '@/components';
 import { convertToPdf } from '@/api';
 import { useSavedPDFs } from '@/hooks';
 
@@ -58,7 +58,7 @@ const App: React.FC = () => {
               Convert file
             </Button>
             <SavedPDF savedPdfData={savedEntries} className="mt-4">
-              <SavedPDF.List savedPdfData={savedEntries} onEntryClick={handleSavedEntryClick} />
+              <SavedPDFList savedPdfData={savedEntries} onEntryClick={handleSavedEntryClick} />
             </SavedPDF>
           </div>
           <div className="w-1/2 p-4 flex justify-center">
