@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
-import { Document, pdfjs, Page } from 'react-pdf';
+import { Document, Page } from 'react-pdf';
 import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
 import 'react-pdf/dist/esm/Page/TextLayer.css';
 import '@react-pdf-viewer/core/lib/styles/index.css';
-
-pdfjs.GlobalWorkerOptions.workerSrc = new URL('pdfjs-dist/build/pdf.worker.min.mjs', import.meta.url).toString();
 
 const options = {
   cMapUrl: '/cmaps/',
