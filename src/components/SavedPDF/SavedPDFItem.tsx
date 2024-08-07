@@ -1,6 +1,6 @@
 import React from 'react';
 import { PdfFileData } from '@/types';
-import { Card, CardContent, CardHeader, CardTitle } from '../Card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components';
 
 interface SavedPDFItemProps {
   entry: PdfFileData;
