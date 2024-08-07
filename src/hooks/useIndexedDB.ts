@@ -9,7 +9,6 @@ interface UseIndexedDBOptions {
 export const useIndexedDB = <T>({ dbName, storeName, version = 1 }: UseIndexedDBOptions) => {
   const [db, setDb] = useState<IDBDatabase | null>(null);
   const [isReady, setIsReady] = useState(false);
-  const [count, setCount] = useState(0);
 
   useEffect(() => {
     const request = indexedDB.open(dbName, version);
@@ -22,7 +21,6 @@ export const useIndexedDB = <T>({ dbName, storeName, version = 1 }: UseIndexedDB
       const database = (event.target as IDBOpenDBRequest).result;
       setDb(database);
       setIsReady(true);
-      updateCount(database);
 
       database.addEventListener('versionchange', () => {
         database.close();
@@ -42,18 +40,6 @@ export const useIndexedDB = <T>({ dbName, storeName, version = 1 }: UseIndexedDB
       db?.close();
     };
   }, [dbName, storeName, version]);
-
-  const updateCount = useCallback(
-    (database: IDBDatabase) => {
-      const transaction = database.transaction(storeName, 'readonly');
-      const store = transaction.objectStore(storeName);
-      const countRequest = store.count();
-      countRequest.onsuccess = () => {
-        setCount(countRequest.result);
-      };
-    },
-    [storeName],
-  );
 
   const performTransaction = useCallback(
     <R>(mode: IDBTransactionMode, callback: (store: IDBObjectStore) => IDBRequest<R>): Promise<R> => {
@@ -81,24 +67,5 @@ export const useIndexedDB = <T>({ dbName, storeName, version = 1 }: UseIndexedDB
 
   const getAll = useCallback(() => performTransaction('readonly', (store) => store.getAll()), [performTransaction]);
 
-  const get = useCallback(
-    (id: IDBValidKey) => performTransaction('readonly', (store) => store.get(id)),
-    [performTransaction],
-  );
-
-  const update = useCallback(
-    async (id: IDBValidKey, changes: Partial<T>): Promise<IDBValidKey> => {
-      const item = (await get(id)) as T;
-      if (!item) throw new Error('Item not found');
-      return performTransaction('readwrite', (store) => store.put({ ...item, ...changes }));
-    },
-    [get, performTransaction],
-  );
-
-  const remove = useCallback(
-    (id: IDBValidKey) => performTransaction('readwrite', (store) => store.delete(id)),
-    [performTransaction],
-  );
-
-  return { add, getAll, get, update, remove, isReady, count };
+  return { add, getAll, isReady };
 };
