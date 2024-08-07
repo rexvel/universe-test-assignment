@@ -38,7 +38,6 @@ const App: React.FC = () => {
       console.error('Error converting to PDF:', error);
     }
   };
-  console.log(pdfUrl);
   return (
     <ErrorBoundary fallback={ErrorFallback}>
       <Layout>

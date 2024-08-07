@@ -1,7 +1,6 @@
 import React from 'react';
 import { PdfFileData } from '@/types';
-import { ScrollArea } from '../ScrollArea';
-import { SavedPDFItem } from './SavedPDFItem';
+import { ScrollArea, SavedPDFItem } from '@/components';
 
 interface SavedPDFListProps {
   savedPdfData: PdfFileData[];

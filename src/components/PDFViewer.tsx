@@ -17,12 +17,11 @@ type Props = {
 };
 
 export const PDFViewer: React.FC<Props> = ({ pdfUrl }) => {
-  console.log(pdfUrl);
   if (!pdfUrl) {
     return (
       <Card className="w-full h-[500px] flex items-center justify-center">
         <CardContent>
-          <p className="text-gray-500 text-center">Select a PDF file to preview its content</p>
+          <p className="text-gray-500 text-center">Select or create a PDF file to preview its content</p>
         </CardContent>
       </Card>
     );
