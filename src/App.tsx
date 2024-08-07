@@ -6,6 +6,7 @@ import { useSavedPDFs } from '@/hooks';
 import '@/App.css';
 import 'react-pdf/dist/Page/TextLayer.css';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
+import { encodePdfDataUrl } from './lib/utils';
 
 export interface PdfFileData {
   id?: string;
@@ -13,9 +14,11 @@ export interface PdfFileData {
   pdfUrl: string | null;
 }
 
+export type Nullish = null | undefined;
+
 const App: React.FC = () => {
   const [text, setText] = useState('');
-  const [pdfUrl, setPdfUrl] = useState<string | null>(null);
+  const [pdfUrl, setPdfUrl] = useState<string | Nullish>();
 
   const { savedEntries, addPdf } = useSavedPDFs();
 
@@ -60,7 +63,7 @@ const App: React.FC = () => {
           </div>
           <div className="w-1/2 p-4 flex justify-center">
             <Only when={pdfUrl}>
-              <PDFViewer file={`data:application/pdf;base64,${pdfUrl}`} />
+              <PDFViewer file={encodePdfDataUrl(pdfUrl)} />
             </Only>
           </div>
         </main>
