@@ -14,7 +14,7 @@ export interface PdfFileData {
 }
 
 const App: React.FC = () => {
-  const [text, setText] = useState<string>('');
+  const [text, setText] = useState('');
   const [pdfUrl, setPdfUrl] = useState<string | null>(null);
 
   const { savedEntries, addPdf } = useSavedPDFs();

@@ -9,7 +9,7 @@ interface UseIndexedDBOptions {
 export const useIndexedDB = <T>({ dbName, storeName, version = 1 }: UseIndexedDBOptions) => {
   const [db, setDb] = useState<IDBDatabase | null>(null);
   const [isReady, setIsReady] = useState(false);
-  const [count, setCount] = useState<number>(0);
+  const [count, setCount] = useState(0);
 
   useEffect(() => {
     const request = indexedDB.open(dbName, version);
