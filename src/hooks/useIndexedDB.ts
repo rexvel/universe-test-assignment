@@ -43,19 +43,21 @@ export const useIndexedDB = <T>({ dbName, storeName, version = 1 }: UseIndexedDB
 
   const performTransaction = useCallback(
     <R>(mode: IDBTransactionMode, callback: (store: IDBObjectStore) => IDBRequest<R>): Promise<R> => {
-      return new Promise((resolve, reject) => {
-        if (!db) {
-          reject(new Error('Database not initialized'));
-          return;
-        }
+      const { promise, resolve, reject } = Promise.withResolvers<R>();
 
-        const transaction = db.transaction(storeName, mode);
-        const store = transaction.objectStore(storeName);
-        const request = callback(store);
+      if (!db) {
+        reject(new Error('Database not initialized'));
+        return promise;
+      }
 
-        request.onerror = () => reject(request.error);
-        request.onsuccess = () => resolve(request.result);
-      });
+      const transaction = db.transaction(storeName, mode);
+      const store = transaction.objectStore(storeName);
+      const request = callback(store);
+
+      request.onerror = () => reject(request.error);
+      request.onsuccess = () => resolve(request.result);
+
+      return promise;
     },
     [db, storeName],
   );
