@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
-import { Layout, Button, Textarea, Only, PDFViewer, SavedPDF, ErrorBoundary } from '@/components';
+import { Layout, Button, Textarea, Only, PDFViewer, SavedPDF, ErrorBoundary, SavedPDFList } from '@/components';
 import { convertToPdf } from '@/api';
 import { useSavedPDFs } from '@/hooks';
 
 import '@/App.css';
 import 'react-pdf/dist/Page/TextLayer.css';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
+import { encodePdfDataUrl } from './lib/utils';
+import { ErrorFallback } from './components/Fallback';
 
 export interface PdfFileData {
   id?: string;
@@ -13,9 +15,11 @@ export interface PdfFileData {
   pdfUrl: string | null;
 }
 
+export type Nullish = null | undefined;
+
 const App: React.FC = () => {
-  const [text, setText] = useState<string>('');
-  const [pdfUrl, setPdfUrl] = useState<string | null>(null);
+  const [text, setText] = useState('');
+  const [pdfUrl, setPdfUrl] = useState<string | Nullish>();
 
   const { savedEntries, addPdf } = useSavedPDFs();
 
@@ -39,28 +43,21 @@ const App: React.FC = () => {
   };
 
   return (
-    <ErrorBoundary
-      fallback={({ error }) => (
-        <div>
-          <h2>Oops! Something went wrong.</h2>
-          <pre>{error?.message}</pre>
-        </div>
-      )}
-    >
+    <ErrorBoundary fallback={ErrorFallback}>
       <Layout>
         <main className="flex h-screen">
           <div className="w-1/2 p-4 flex flex-col">
             <Textarea value={text} onChange={handleTextChange} className="flex-grow mb-4" />
             <Button onClick={handleConvert} className="w-full">
-              Convert file
+              Convert text to pdf
             </Button>
             <SavedPDF savedPdfData={savedEntries} className="mt-4">
-              <SavedPDF.List savedPdfData={savedEntries} onEntryClick={handleSavedEntryClick} />
+              <SavedPDFList savedPdfData={savedEntries} onEntryClick={handleSavedEntryClick} />
             </SavedPDF>
           </div>
           <div className="w-1/2 p-4 flex justify-center">
             <Only when={pdfUrl}>
-              <PDFViewer file={`data:application/pdf;base64,${pdfUrl}`} />
+              <PDFViewer file={encodePdfDataUrl(pdfUrl)} />
             </Only>
           </div>
         </main>

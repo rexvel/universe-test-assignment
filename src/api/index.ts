@@ -2,7 +2,7 @@ import { apiKey, apiURl } from '@/constants';
 
 const handleErrorMessage = (error: unknown) => (error instanceof Error ? error.message : 'Unknown error');
 
-export async function convertToPdf(text: string): Promise<string | null> {
+export const convertToPdf = async (text: string): Promise<string | null> => {
   const apiUrl = `${apiURl}/create-pdf?apiKey=${apiKey}`;
 
   try {
@@ -26,4 +26,4 @@ export async function convertToPdf(text: string): Promise<string | null> {
     console.error('Error generating PDF:', handleErrorMessage(error));
     return null;
   }
-}
+};
