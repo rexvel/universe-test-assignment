@@ -1,6 +1,6 @@
 import { apiKey, apiURl } from '@/constants';
 
-const handleErrorMessage = (error: unknown) => (error instanceof Error ? error.message : 'Unknown error');
+export const handleErrorMessage = (error: unknown) => (error instanceof Error ? error.message : 'Unknown error');
 
 export const convertToPdf = async (text: string): Promise<string | null> => {
   const apiUrl = `${apiURl}/create-pdf?apiKey=${apiKey}`;
