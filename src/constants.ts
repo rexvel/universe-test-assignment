@@ -7,3 +7,5 @@ export const indexedDbConfig = {
   storeName: 'pdfs',
   version: 1,
 };
+
+export const DEFAULT_PAGE_NUMBER = 1;

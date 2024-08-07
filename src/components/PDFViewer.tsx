@@ -3,6 +3,7 @@ import { Document, Page } from 'react-pdf';
 import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
 import 'react-pdf/dist/esm/Page/TextLayer.css';
 import '@react-pdf-viewer/core/lib/styles/index.css';
+import { DEFAULT_PAGE_NUMBER } from '@/constants';
 
 const options = {
   cMapUrl: '/cmaps/',
@@ -24,7 +25,7 @@ export const PDFViewer: React.FC<Props> = ({ file }) => {
           file={file}
           options={options}
         >
-          <Page width={400} />
+          <Page pageNumber={DEFAULT_PAGE_NUMBER} width={400} />
         </Document>
       </div>
     </div>
