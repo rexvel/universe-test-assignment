@@ -13,7 +13,7 @@
 - [Tailwind CSS](https://github.com/tailwindlabs/tailwindcss)
 - [PostCSS](https://github.com/postcss/postcss)
 - [RadixUI](https://github.com/radix-ui/primitives)
-- [Shadcn](https://github.com/shadcn/shadcn)
+- [Shadcn](https://github.com/shadcn-ui/ui)
 - [React-pdf](https://github.com/wojtekmaj/react-pdf)
 - [React Hook Form](https://github.com/react-hook-form/react-hook-form)
 
