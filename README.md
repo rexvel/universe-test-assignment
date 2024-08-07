@@ -1,30 +1,37 @@
-# React + TypeScript + Vite
+# Simple PDF Converter
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Реалізація простого React додатку, який дозволяє користувачам конвертувати введений текст у PDF документ.
 
-Currently, two official plugins are available:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### Основний Стек Технологій
 
-## Expanding the ESLint configuration
+- [TypeScript](https://github.com/microsoft/TypeScript)
+- [React](https://github.com/facebook/react)
+- [Vite](https://github.com/vitejs/vite)
+- [Vitest](https://github.com/vitest-dev/vitest)
+- [React Testing Library](https://github.com/testing-library/react-testing-library)
+- [pnpm](https://github.com/pnpm/pnpm)
+- [Tailwind CSS](https://github.com/tailwindlabs/tailwindcss)
+- [PostCSS](https://github.com/postcss/postcss)
+- [RadixUI](https://github.com/radix-ui/primitives)
+- [Shadcn](https://github.com/shadcn/shadcn)
+- [React-pdf](https://github.com/wojtekmaj/react-pdf)
+- [React Hook Form](https://github.com/react-hook-form/react-hook-form)
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+### Додаткові інструменти для поліпшення роботи
 
-- Configure the top-level `parserOptions` property like this:
+- [ESLint](https://github.com/eslint/eslint)
+- [Prettier](https://github.com/prettier/prettier)
+- [Commitlint](https://github.com/conventional-changelog/commitlint)
+- [Lint-staged](https://github.com/okonet/lint-staged)
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json', './tsconfig.app.json'],
-    tsconfigRootDir: __dirname,
-  },
-};
-```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+### Структура Папок в src
+
+- **src**
+  - **api**: Модуль для виконання API-запитів
+  - **components**: Компоненти React
+  - **hooks**: Кастомні хуки для інкапсуляції логіки
+  - **lib**: Містить утилітні функції
+  - **test**: Тести для API модулю та основних хуків
+
