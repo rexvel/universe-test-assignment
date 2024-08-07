@@ -55,7 +55,7 @@ const App: React.FC = () => {
           <div className="w-1/2 p-4 flex flex-col">
             <Textarea value={text} onChange={handleTextChange} className="flex-grow mb-4" />
             <Button onClick={handleConvert} className="w-full">
-              Convert file
+              Convert text to pdf
             </Button>
             <SavedPDF savedPdfData={savedEntries} className="mt-4">
               <SavedPDFList savedPdfData={savedEntries} onEntryClick={handleSavedEntryClick} />
